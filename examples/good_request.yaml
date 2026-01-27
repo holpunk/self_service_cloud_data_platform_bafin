@@ -1,0 +1,7 @@
+# Good Request: Validates success scenarios
+name: "finance_reports"
+environment: "prod"
+region: "eu-central-1"
+encryption:
+  enabled: true
+public_access: false

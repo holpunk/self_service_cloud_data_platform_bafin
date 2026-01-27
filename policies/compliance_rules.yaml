@@ -1,0 +1,26 @@
+# Policy Definitions for BaFin Compliant Platform
+# These rules are enforced by the Platform Gateway before Terraform is generated.
+
+aws:
+  region: "eu-central-1" # Data Residency: Germany
+  s3:
+    required_tags:
+      - "DataClassification"
+      - "Owner"
+    encryption:
+      enabled: true
+      type: "aws:kms" # Customer Managed Keys required for high sensitivity
+    versioning: true
+    logging: true
+    public_access_block: true
+
+snowflake:
+  region: "eu-central-1"
+  network_policy:
+    allowed_ip_list: ["10.0.0.0/16"] # Only allow traffic from the VPC
+  retention:
+    time_travel_days: 90 # Regulatory requirement for auditability
+
+general:
+  allowed_environments: ["dev", "test", "prod"]
+  require_approval_for: ["prod"]

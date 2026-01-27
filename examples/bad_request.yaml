@@ -1,0 +1,7 @@
+# Bad Request: Validates failure scenarios
+name: "risky_product"
+environment: "prod"
+region: "us-east-1" # FAIL: Wrong Region
+encryption: 
+  enabled: false    # FAIL: No Encryption
+public_access: true # FAIL: Public Access
