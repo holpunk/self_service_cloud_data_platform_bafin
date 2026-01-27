@@ -1,17 +1,3 @@
-variable "product_name" {
-  description = "Name of the data product (e.g., 'customer_360')"
-  type        = string
-}
-
-variable "environment" {
-  type = string
-}
-
-variable "kms_key_arn" {
-  description = "ARN of the KMS key for encryption"
-  type        = string
-}
-
 # --- AWS S3 Bucket for Raw Data ---
 resource "aws_s3_bucket" "product_bucket" {
   bucket = "bafin-dp-${var.product_name}-${var.environment}"
