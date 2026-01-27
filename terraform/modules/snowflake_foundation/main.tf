@@ -7,15 +7,6 @@ terraform {
   }
 }
 
-variable "vpc_cidr" {
-  description = "The CIDR block of the AWS VPC to allowlist"
-  type        = string
-}
-
-variable "environment" {
-  type = string
-}
-
 # Network Policy: Restrict access to only the AWS VPC
 # This ensures data cannot be accessed from public internet
 resource "snowflake_network_policy" "vpc_only" {
