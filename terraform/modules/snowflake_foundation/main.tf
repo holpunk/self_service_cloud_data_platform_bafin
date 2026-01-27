@@ -1,11 +1,3 @@
-terraform {
-  required_providers {
-    snowflake = {
-      source  = "Snowflake-Labs/snowflake"
-      version = "~> 0.87"
-    }
-  }
-}
 
 # Network Policy: Restrict access to only the AWS VPC
 # This ensures data cannot be accessed from public internet
