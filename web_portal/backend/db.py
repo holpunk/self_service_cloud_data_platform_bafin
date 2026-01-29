@@ -7,9 +7,9 @@ DB_FILE = os.path.join(os.path.dirname(__file__), 'db.json')
 
 # Mock Users Config
 USERS = {
-    "alice": {"name": "Alice Admin", "role": "claims_management", "domain": "claims_management", "password": "password"},
-    "bob": {"name": "Bob Manager", "role": "policy_administration", "domain": "policy_administration", "password": "password"},
-    "charlie": {"name": "Charlie Risk", "role": "risk_assessment", "domain": "risk_assessment", "password": "password"}
+    "alice": {"name": "Alice Admin", "role": "claims_management", "domain": "claims_management", "password": "alicepassword"},
+    "bob": {"name": "Bob Manager", "role": "policy_administration", "domain": "policy_administration", "password": "bobpassword"},
+    "charlie": {"name": "Charlie Risk", "role": "risk_assessment", "domain": "risk_assessment", "password": "charliepassword"}
 }
 
 def init_db():
