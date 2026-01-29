@@ -35,26 +35,33 @@
             </div>
 
             <div class="nav-tabs">
-                <div class="nav-tab active" onclick="switchTab('marketplace')">Marketplace</div>
+                <div class="nav-tab active" onclick="switchTab('myProducts')">My Data Products</div>
+                <div class="nav-tab" onclick="switchTab('marketplace')">Marketplace</div>
                 <div class="nav-tab" onclick="switchTab('inbox')">My Inbox (Approvals)</div>
-                <div class="nav-tab" onclick="switchTab('access')">My Access</div>
+                <div class="nav-tab" onclick="switchTab('access')">External Access</div>
             </div>
         </header>
 
-        <!-- Tab 1: Marketplace -->
-        <div id="marketplace" class="tab-content active">
+        <!-- Tab 1: My Data Products -->
+        <div id="myProducts" class="tab-content active">
+            <h3 style="margin-bottom: 1rem;">Data Owned by My Domain</h3>
+            <div id="myProductsGrid" class="grid">Loading...</div>
+        </div>
+
+        <!-- Tab 2: Marketplace -->
+        <div id="marketplace" class="tab-content">
             <div id="catalogGrid" class="grid">Loading...</div>
         </div>
 
-        <!-- Tab 2: Inbox -->
+        <!-- Tab 3: Inbox -->
         <div id="inbox" class="tab-content">
             <h3 style="margin-bottom: 1rem;">Pending Requests for Review</h3>
             <div id="inboxList">Loading...</div>
         </div>
 
-        <!-- Tab 3: My Access -->
+        <!-- Tab 4: My Access -->
         <div id="access" class="tab-content">
-            <h3 style="margin-bottom: 1rem;">Data Products I Can Access</h3>
+            <h3 style="margin-bottom: 1rem;">External Data I Can Access</h3>
             <div id="accessList">Loading...</div>
         </div>
     </div>
@@ -71,6 +78,23 @@
                     style="background: transparent; border: 1px solid var(--border); color: #94a3b8;">Cancel</button>
                 <button onclick="submitRequest()"
                     style="background: var(--primary); color: white; border: none;">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Data Modal -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 id="dataModalTitle">Data Preview</h2>
+                <button onclick="closeDataModal()"
+                    style="width: auto; padding: 0.5rem; background: transparent; color: var(--text-muted); font-size: 1.5rem; border: none; cursor: pointer;">&times;</button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="dataTable"
+                    style="width: 100%; border-collapse: collapse; color: var(--text-main); font-size: 0.9rem;">
+                    <!-- JS will populate -->
+                </table>
             </div>
         </div>
     </div>

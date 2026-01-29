@@ -10,10 +10,12 @@ function switchTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
     // Find tab by text content approximation or index (simple map)
-    const tabs = { 'marketplace': 0, 'inbox': 1, 'access': 2 };
+    const tabs = { 'myProducts': 0, 'marketplace': 1, 'inbox': 2, 'access': 3 };
     document.querySelectorAll('.nav-tab')[tabs[tabId]].classList.add('active');
     document.getElementById(tabId).classList.add('active');
 
+    if (tabId === 'myProducts') loadMyProducts();
+    if (tabId === 'marketplace') loadCatalog();
     if (tabId === 'inbox') loadInbox();
     if (tabId === 'access') loadAccess();
 }
@@ -23,14 +25,44 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-// --- Catalog ---
+// --- My Data Products ---
+async function loadMyProducts() {
+    const res = await fetch(`${API_URL}/catalog`);
+    const data = await res.json();
+    const grid = document.getElementById('myProductsGrid');
+    grid.innerHTML = '';
+
+    // Filter for products owned by ME (user.domain)
+    const myProducts = data.products.filter(p => p.name === user.user.domain);
+
+    if (myProducts.length === 0) {
+        grid.innerHTML = '<p style="color: #64748b;">No data products found for your domain.</p>';
+        return;
+    }
+
+    myProducts.forEach(p => {
+        grid.innerHTML += `
+            <div class="card" style="border-color: var(--primary);">
+                <h3>${p.name}</h3>
+                <span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: #86efac;">Owner</span>
+                <p style="margin: 1rem 0; font-size: 0.8rem; color: #94a3b8;">Region: eu-central-1</p>
+                <button onclick="viewData('${p.name}')" style="width:100%; padding: 0.5rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer;">View Data</button>
+            </div>`;
+    });
+}
+
+// --- Marketplace ---
 let selectedProduct = null;
 async function loadCatalog() {
     const res = await fetch(`${API_URL}/catalog`);
     const data = await res.json();
     const grid = document.getElementById('catalogGrid');
     grid.innerHTML = '';
-    data.products.forEach(p => {
+
+    // Filter OUT my products
+    const marketplaceProducts = data.products.filter(p => p.name !== user.user.domain);
+
+    marketplaceProducts.forEach(p => {
         grid.innerHTML += `
             <div class="card">
                 <h3>${p.name}</h3>
@@ -104,13 +136,69 @@ async function loadAccess() {
     data.allowed_domains.forEach(d => {
         list.innerHTML += `
             <div class="access-row">
-                <span>${d}</span>
-                <span class="status-badge">Access Granted</span>
+                <div style="display:flex; align-items:center; gap: 1rem;">
+                    <strong>${d}</strong>
+                    <span class="status-badge">Access Granted</span>
+                </div>
+                <button onclick="viewData('${d}')" style="width: auto; padding: 0.4rem 1rem; font-size: 0.8rem; background: rgba(99,102,241,0.1); color: var(--primary); border: 1px solid var(--primary);">
+                    View Data
+                </button>
             </div>`;
     });
     if (data.allowed_domains.length === 0) {
         list.innerHTML = '<p style="color: #64748b;">No access granted yet.</p>';
     }
+}
+
+// --- Data Viewer ---
+async function viewData(productName) {
+    try {
+        const res = await fetch(`${API_URL}/data/${productName}?username=${user.username}`);
+        if (!res.ok) {
+            alert("Failed to fetch data or access denied.");
+            return;
+        }
+        const data = await res.json();
+        renderTable(data.records);
+        document.getElementById('dataModalTitle').innerText = `Data Preview: ${productName}`;
+        document.getElementById('dataModal').classList.add('active');
+    } catch (err) {
+        console.error(err);
+        alert("Error loading data.");
+    }
+}
+
+function closeDataModal() {
+    document.getElementById('dataModal').classList.remove('active');
+}
+
+function renderTable(records) {
+    const table = document.getElementById('dataTable');
+    table.innerHTML = '';
+
+    if (!records || records.length === 0) {
+        table.innerHTML = '<tr><td>No records found.</td></tr>';
+        return;
+    }
+
+    // Headers
+    const headers = Object.keys(records[0]);
+    let thead = '<tr style="border-bottom: 2px solid var(--border); text-align: left;">';
+    headers.forEach(h => {
+        thead += `<th style="padding: 0.75rem;">${h}</th>`;
+    });
+    thead += '</tr>';
+    table.innerHTML += thead;
+
+    // Body
+    records.forEach(row => {
+        let tr = '<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">';
+        headers.forEach(h => {
+            tr += `<td style="padding: 0.75rem;">${row[h]}</td>`;
+        });
+        tr += '</tr>';
+        table.innerHTML += tr;
+    });
 }
 
 // --- Modal ---
@@ -131,5 +219,5 @@ async function submitRequest() {
 }
 
 // Init
-loadCatalog();
+loadMyProducts();
 loadInbox(); // Initialize badge count

@@ -26,6 +26,33 @@
       "reason": "I want to have access",
       "status": "APPROVED",
       "timestamp": "2026-01-29T18:55:37.254900"
+    },
+    {
+      "id": "bbfe4f9c-0a42-479c-8ce7-aa90b7464ff1",
+      "requester": "alice",
+      "role": "claims_management",
+      "target_product": "policy_administration",
+      "reason": "i want to test for bell icon glow effect",
+      "status": "PENDING",
+      "timestamp": "2026-01-29T19:42:31.603102"
+    },
+    {
+      "id": "534147f2-a99d-43e3-8322-d286ec63c838",
+      "requester": "alice",
+      "role": "claims_management",
+      "target_product": "risk_assessment",
+      "reason": "i want to test for bell icon glow effect",
+      "status": "APPROVED",
+      "timestamp": "2026-01-29T19:43:02.591461"
+    },
+    {
+      "id": "f5ff2af7-7b2c-43ae-a938-39b0b4554f96",
+      "requester": "alice",
+      "role": "claims_management",
+      "target_product": "policy_administration",
+      "reason": "",
+      "status": "PENDING",
+      "timestamp": "2026-01-29T20:58:44.657301"
     }
   ]
 }

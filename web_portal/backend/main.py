@@ -163,6 +163,23 @@ async def get_catalog():
                     continue
     return {"products": products}
 
+from mock_data import generate_mock_data
+
+@app.get("/api/data/{product_name}")
+async def get_data_preview(product_name: str, username: str):
+    """
+    Returns mock data for a product IF the user has approved access.
+    """
+    allowed_domains = get_approved_access(username)
+    
+    # Check if user has access to this specific product
+    # Note: allowed_domains contains strings like "risk_assessment"
+    if product_name not in allowed_domains:
+         raise HTTPException(status_code=403, detail=f"Access denied to {product_name}")
+
+    data = generate_mock_data(product_name)
+    return {"product": product_name, "records": data}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
