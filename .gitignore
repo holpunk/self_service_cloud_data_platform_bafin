@@ -18,3 +18,9 @@ venv/
 
 # Platform Gateway Simulation Output
 terraform/*.auto.tfvars
+
+# Web Portal Data
+web_portal/backend/db.json
+
+# Secrets & Env
+.env
