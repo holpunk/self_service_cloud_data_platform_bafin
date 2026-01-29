@@ -47,13 +47,16 @@ async function loadInbox() {
     const data = await res.json();
 
     const badge = document.getElementById('badgeCount');
+    const bellWrapper = document.querySelector('.bell-wrapper');
     const count = data.requests.length;
 
     if (count > 0) {
         badge.innerText = count;
         badge.classList.add('show');
+        bellWrapper.classList.add('has-notifications');
     } else {
         badge.classList.remove('show');
+        bellWrapper.classList.remove('has-notifications');
     }
 
     const list = document.getElementById('inboxList');

@@ -330,28 +330,70 @@ button:hover {
     cursor: pointer;
     margin-right: 1rem;
     color: var(--text-muted);
+    transition: color 0.3s, transform 0.2s;
 }
 
 .bell-wrapper:hover {
     color: var(--text-main);
+    transform: scale(1.1);
+}
+
+.bell-wrapper.has-notifications {
+    color: var(--primary);
+    /* Illuminate the bell icon itself */
+    animation: bell-shake 2s infinite;
+}
+
+@keyframes bell-shake {
+    0% {
+        transform: rotate(0);
+    }
+
+    10% {
+        transform: rotate(15deg);
+    }
+
+    20% {
+        transform: rotate(-15deg);
+    }
+
+    30% {
+        transform: rotate(10deg);
+    }
+
+    40% {
+        transform: rotate(-10deg);
+    }
+
+    50% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(0);
+    }
 }
 
 .badge-count {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: -8px;
+    right: -8px;
     background: var(--error);
     color: white;
     border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    font-size: 0.65rem;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     border: 2px solid #1e293b;
     display: none;
+    /* Hidden by default */
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+    /* Glow effect */
+    z-index: 10;
 }
 
 .badge-count.show {
