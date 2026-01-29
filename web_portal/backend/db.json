@@ -33,7 +33,7 @@
       "role": "claims_management",
       "target_product": "policy_administration",
       "reason": "i want to test for bell icon glow effect",
-      "status": "PENDING",
+      "status": "REJECTED",
       "timestamp": "2026-01-29T19:42:31.603102"
     },
     {
@@ -51,8 +51,26 @@
       "role": "claims_management",
       "target_product": "policy_administration",
       "reason": "",
-      "status": "PENDING",
+      "status": "REJECTED",
       "timestamp": "2026-01-29T20:58:44.657301"
+    },
+    {
+      "id": "10c4f26e-8579-4444-9d04-a2f6286dc08b",
+      "requester": "charlie",
+      "role": "risk_assessment",
+      "target_product": "policy_administration",
+      "reason": "i want to test ",
+      "status": "APPROVED",
+      "timestamp": "2026-01-29T21:11:15.682280"
+    },
+    {
+      "id": "ae0ee07a-ca18-4990-908c-f5d6b3e16acf",
+      "requester": "bob",
+      "role": "data_engineer",
+      "target_product": "risk_assessment",
+      "reason": "i want to check masking",
+      "status": "APPROVED",
+      "timestamp": "2026-01-29T21:16:36.277084"
     }
   ]
 }

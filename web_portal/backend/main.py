@@ -101,7 +101,10 @@ async def request_access(request: AccessRequest):
     if request.username not in USERS:
          raise HTTPException(status_code=401, detail="User not found")
          
-    add_request(request.username, request.target_product, request.reason)
+    try:
+        add_request(request.username, request.target_product, request.reason)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     
     return {
         "status": "pending_approval",

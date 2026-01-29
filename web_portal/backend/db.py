@@ -7,9 +7,9 @@ DB_FILE = os.path.join(os.path.dirname(__file__), 'db.json')
 
 # Mock Users Config
 USERS = {
-    "alice": {"name": "Alice Admin", "role": "claims_management", "domain": "claims_management", "password": "alicepassword"},
-    "bob": {"name": "Bob Manager", "role": "policy_administration", "domain": "policy_administration", "password": "bobpassword"},
-    "charlie": {"name": "Charlie Risk", "role": "risk_assessment", "domain": "risk_assessment", "password": "charliepassword"}
+    "alice": {"name": "Alice Admin", "role": "admin", "domain": "claims_management", "password": "alicepassword"},
+    "bob": {"name": "Bob Manager", "role": "data_engineer", "domain": "policy_administration", "password": "bobpassword"},
+    "charlie": {"name": "Charlie Risk", "role": "reader", "domain": "risk_assessment", "password": "charliepassword"}
 }
 
 def init_db():
@@ -29,6 +29,13 @@ def save_db(data):
 
 def add_request(requester, target_product, reason):
     db = load_db()
+    
+    # Check for existing request
+    for req in db["requests"]:
+        if req["requester"] == requester and req["target_product"] == target_product:
+            if req["status"] in ["PENDING", "APPROVED"]:
+                raise ValueError(f"Request already exists with status: {req['status']}")
+
     new_req = {
         "id": str(uuid.uuid4()),
         "requester": requester,
@@ -55,10 +62,10 @@ def get_approved_access(user):
     
     # Add implicit access to their own domain
     user_domain = USERS.get(user, {}).get("domain")
-    if user_domain and user_domain not in approved:
+    if user_domain:
         approved.append(user_domain)
         
-    return approved
+    return list(set(approved))
 
 def update_status(request_id, status):
     db = load_db()
