@@ -4,11 +4,11 @@ from pydantic import BaseModel
 import sys
 import os
 
-# Add parent directory to sys.path to import platform_gateway
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+# Add platform_gateway directory to sys.path to support its internal imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../platform_gateway'))
 
-from platform_gateway.validator import PolicyValidator
-from platform_gateway.cli import generate_terraform
+from validator import PolicyValidator
+from cli import generate_terraform
 
 app = FastAPI(title="BaFin Self-Service Data Portal")
 
