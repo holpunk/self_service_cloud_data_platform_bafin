@@ -177,8 +177,11 @@ async def get_data_preview(product_name: str, username: str):
     if product_name not in allowed_domains:
          raise HTTPException(status_code=403, detail=f"Access denied to {product_name}")
 
-    data = generate_mock_data(product_name)
-    return {"product": product_name, "records": data}
+    # Get User Role
+    user_role = USERS.get(username, {}).get("role", "reader")
+    
+    data = generate_mock_data(product_name, role=user_role)
+    return {"product": product_name, "records": data, "role_used": user_role}
 
 if __name__ == "__main__":
     import uvicorn
