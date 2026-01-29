@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaFin Data Platform | Self-Service</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-glow"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>BaFin Cloud Platform</span>
+            </div>
+            <h1>New Data Product Request</h1>
+            <p class="subtitle">Securely provision compliant infrastructure for your domain.</p>
+        </header>
+
+        <main>
+            <form id="requestForm">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" name="name" placeholder="e.g., finance_reports" required>
+                    <p class="hint">Use snake_case. Corresponds to S3 bucket & DB name.</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="environment">Environment</label>
+                        <select id="environment" name="environment">
+                            <option value="dev">Development</option>
+                            <option value="test">Test</option>
+                            <option value="prod">Production</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="region">AWS Region</label>
+                        <select id="region" name="region">
+                            <option value="eu-central-1">eu-central-1 (Frankfurt)</option>
+                            <option value="us-east-1">us-east-1 (N. Virginia)</option>
+                            <option value="eu-west-1">eu-west-1 (Ireland)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Security & Compliance</h3>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="encryption" name="encryption" checked disabled>
+                        <label for="encryption">
+                            <span>Enable KMS Encryption</span>
+                            <span class="badge required">Required</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="publicAccess" name="publicAccess">
+                        <label for="publicAccess">
+                            <span>Allow Public Access</span>
+                            <span class="badge warning">Restricted</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="statusMessage" class="status-message hidden"></div>
+
+                <button type="submit" id="submitBtn">
+                    <span>Provision Infrastructure</span>
+                    <div class="spinner hidden"></div>
+                </button>
+            </form>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

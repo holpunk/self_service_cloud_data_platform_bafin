@@ -39,9 +39,10 @@ def create_product(file):
         # Simulation of Terraform Generation
         generate_terraform(request)
 
-def generate_terraform(request):
+def generate_terraform(request, output_dir='terraform'):
     """
-    Simulates writing a terraform.tfvars file or running terraform apply.
+    Simulates writing a terraform.tfvars file.
+    Returns the path to the written file.
     """
     product_name = request['name']
     env = request['environment']
@@ -53,16 +54,16 @@ def generate_terraform(request):
     kms_key_arn  = "arn:aws:kms:eu-central-1:123456789012:key/simulation-key"
     """
     
-    output_file = f"terraform/product_{product_name}_{env}.auto.tfvars"
-    # Ensure directory exists for simulation purposes (root terraform dir)
-    if not os.path.exists('terraform'):
-        os.makedirs('terraform')
+    # Ensure directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    output_file = os.path.join(output_dir, f"product_{product_name}_{env}.auto.tfvars")
         
     with open(output_file, 'w') as f:
         f.write(tf_content)
     
-    click.echo(f"Terraform variables written to {output_file}")
-    click.echo(click.style("Ready for Provisioning. (Simulation Complete)", fg="blue"))
+    return output_file
 
 if __name__ == '__main__':
     cli()
