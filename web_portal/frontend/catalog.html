@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaFin Data Marketplace | Catalog</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 900px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            background: rgba(30, 41, 59, 0.8);
+            border-color: var(--primary);
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .tag.prod {
+            background: rgba(16, 185, 129, 0.2);
+            color: #86efac;
+        }
+
+        .tag.dev {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        .actions {
+            margin-top: 1rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            width: 100%;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+        }
+
+        .modal h2 {
+            margin-bottom: 1rem;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-glow"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#4F46E5" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 17L12 22L22 17" stroke="#4F46E5" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M2 12L12 17L22 12" stroke="#4F46E5" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <span>BaFin Data Marketplace</span>
+            </div>
+            <h1>Data Product Catalog</h1>
+            <p class="subtitle">Discover valid, compliant datasets from other domains.</p>
+        </header>
+
+        <div id="catalogGrid" class="grid">
+            <!-- Items injected by JS -->
+            <div class="card">Loading...</div>
+        </div>
+
+        <div style="margin-top: 2rem; text-align: center;">
+            <a href="index.html" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">&larr; Back to
+                Provisioning</a>
+        </div>
+    </div>
+
+    <!-- Request Access Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Request Access</h2>
+            <p style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem;">You are requesting access to a
+                confidential data product. This request will be logged for BaFin auditing.</p>
+
+            <label>Reason for Access</label>
+            <textarea id="requestReason" placeholder="I need this data for quarterly risk reporting..."></textarea>
+
+            <div class="btn-group">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button onclick="submitRequest()">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let selectedProduct = null;
+
+        async function loadCatalog() {
+            try {
+                const res = await fetch(`${API_URL}/catalog`);
+                const data = await res.json();
+
+                const grid = document.getElementById('catalogGrid');
+                grid.innerHTML = '';
+
+                data.products.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h3>${p.name.replace(/_/g, ' ')}</h3>
+                        <span class="tag ${p.environment}">${p.environment.toUpperCase()}</span>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+                            Domain: ${p.name}<br>
+                            Region: eu-central-1
+                        </p>
+                        <div class="actions">
+                            <button class="btn-outline" onclick="openModal('${p.name}')">Request Access</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('catalogGrid').innerHTML = '<div style="color:red">Failed to load catalog. Is backend running?</div>';
+            }
+        }
+
+        function openModal(productName) {
+            selectedProduct = productName;
+            document.getElementById('modalTitle').innerText = `Request Access: ${productName}`;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            selectedProduct = null;
+        }
+
+        async function submitRequest() {
+            const reason = document.getElementById('requestReason').value;
+            if (!reason) return alert("Please provide a reason.");
+
+            // Mocking current user role
+            const mockRole = "risk_assessment";
+
+            try {
+                const res = await fetch(`${API_URL}/access`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        requester_role: mockRole,
+                        target_product: selectedProduct,
+                        reason: reason
+                    })
+                });
+
+                const data = await res.json();
+                alert(data.message);
+                closeModal();
+            } catch (err) {
+                alert("Request failed");
+            }
+        }
+
+        loadCatalog();
+    </script>
+</body>
+
+</html>

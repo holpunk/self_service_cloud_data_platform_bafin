@@ -1,0 +1,31 @@
+{
+  "requests": [
+    {
+      "id": "392fad7b-941b-4923-9b87-ce258b35d4d6",
+      "requester": "alice",
+      "role": "claims_management",
+      "target_product": "risk_assessment",
+      "reason": "I want to test some data",
+      "status": "REJECTED",
+      "timestamp": "2026-01-29T18:44:33.695404"
+    },
+    {
+      "id": "2e0c580b-4f17-42ef-8b72-7f430aa443d9",
+      "requester": "bob",
+      "role": "policy_administration",
+      "target_product": "policy_administration",
+      "reason": "test",
+      "status": "APPROVED",
+      "timestamp": "2026-01-29T18:47:51.983957"
+    },
+    {
+      "id": "799fd1c2-678c-47eb-b139-ea3826b884ff",
+      "requester": "alice",
+      "role": "claims_management",
+      "target_product": "risk_assessment",
+      "reason": "I want to have access",
+      "status": "APPROVED",
+      "timestamp": "2026-01-29T18:55:37.254900"
+    }
+  ]
+}
