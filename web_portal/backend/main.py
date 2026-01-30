@@ -148,22 +148,26 @@ async def get_catalog():
     """
     Scans the terraform directory to discover available data products.
     """
+    import json
     terraform_dir = os.path.join(os.path.dirname(__file__), '../../terraform')
+    tfvars_path = os.path.join(terraform_dir, "products.auto.tfvars.json")
     products = []
     
-    if os.path.exists(terraform_dir):
-        for filename in os.listdir(terraform_dir):
-            if filename.startswith("product_") and filename.endswith(".auto.tfvars"):
-                try:
-                    parts = filename.replace("product_", "").replace(".auto.tfvars", "").rsplit("_", 1)
-                    if len(parts) == 2:
-                        products.append({
-                            "name": parts[0],
-                            "environment": parts[1],
-                            "id": filename
-                        })
-                except Exception:
-                    continue
+    if os.path.exists(tfvars_path):
+        try:
+            with open(tfvars_path, 'r') as f:
+                data = json.load(f)
+                
+            # data structure is {"products": {"key": {...}}}
+            products_map = data.get("products", {})
+            for key, details in products_map.items():
+                products.append({
+                    "name": details.get("name"),
+                    "environment": details.get("environment"),
+                    "id": key
+                })
+        except Exception:
+            pass # Keep list empty on error
     return {"products": products}
 
 from mock_data import generate_mock_data

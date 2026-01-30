@@ -85,8 +85,11 @@ async function loadCatalog() {
         let actionHtml = '';
 
         if (approvedDomains.has(p.name)) {
-            // Already have access
-            actionHtml = `<span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: #86efac; padding: 0.5rem; display: block; text-align: center;">Access Granted</span>`;
+            // Already have access: Show Button
+            actionHtml = `
+                <span class="status-badge" style="background: rgba(16, 185, 129, 0.2); color: #86efac; margin-bottom: 0.5rem; display: inline-block;">Access Granted</span>
+                <button onclick="viewData('${p.name}')" style="width:100%; padding: 0.5rem; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer;">View Data</button>
+            `;
         } else {
             // Standard Button
             actionHtml = `<button onclick="openModal('${p.name}')" style="width:100%; padding: 0.5rem; background: transparent; border: 1px solid var(--primary); color: var(--primary); border-radius: 6px; cursor: pointer;">Request Access</button>`;
