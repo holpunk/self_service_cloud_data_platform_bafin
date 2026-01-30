@@ -14,7 +14,6 @@ A compliant, self-service data platform designed for BaFin-regulated environment
 ![Dashboard](readme_files/1.png)
 ![Catalog](readme_files/2.png)
 ![Request Access](readme_files/3.png)
-![Approval](readme_files/4.png)
 ![Notifications](readme_files/5.png)
 ![Data Preview](readme_files/6.png)
 *Application Flow: Dashboard -> Catalog -> Request -> Approval -> Notifications -> Data Preview*
