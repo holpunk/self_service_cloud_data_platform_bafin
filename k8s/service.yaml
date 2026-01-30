@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bafin-portal-service
+  namespace: default
+  labels:
+    app: bafin-portal
+spec:
+  selector:
+    app: bafin-portal
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: ClusterIP
